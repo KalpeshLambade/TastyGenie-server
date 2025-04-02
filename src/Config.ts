@@ -9,6 +9,7 @@ export interface FullConfig{
     port: string;
     env: Env;
     domain: string;
+    geminiApiKey:string;
 }
 
 export class Config{

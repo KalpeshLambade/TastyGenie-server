@@ -2,6 +2,7 @@ import express, { Application } from "express";
 import { Config } from "../Config";
 import cors from 'cors'
 import router from "../routes/_route";
+import { GeminiAI } from "../Utils/Gemini";
 
 
 export class ExpressLoader {
@@ -9,6 +10,7 @@ export class ExpressLoader {
 
   public static async init() {
     Config.init();
+    GeminiAI.init();
 
     this.app = express();
     this.app.use(express.json());
