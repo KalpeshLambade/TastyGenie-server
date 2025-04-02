@@ -1,1 +1,3 @@
-console.log("Hello")
+import { ExpressLoader } from "./loaders/ExpressLoader";
+
+ExpressLoader.init();
