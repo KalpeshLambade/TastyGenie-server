@@ -91,17 +91,20 @@ export class GeminiAI {
     preferences?: string;
   }) {
     let prompt = `
-    Generate a list of recipe names (minimum 4, maximum 10) with their estimated preparation times.  
-    Use the following details:  
-    - Ingredients: ${params?.ingredients}  
-    - Cuisine Type (optional): ${params?.cuisine}  
-    - Available Utilities (optional): ${params?.appliances}  
-    - Dietary Preferences (optional): ${params?.preferences}  
+      Generate a list of recipe names (minimum 4, maximum 10) with their estimated preparation times.  
+      Use the following details:  
+      - Ingredients: ${params?.ingredients}  
+      - Cuisine Type (optional): ${params?.cuisine}  
+      - Available Utilities (optional): ${params?.appliances}  
+      - Dietary Preferences (optional): ${params?.preferences}  
+      
+      Return the result as a plain list in the format:  
+      Recipe Name - Cuisine Type - Time  
     
-    Return the result as a plain list in the format:  
-    Recipe Name - Time (minutes)  
-    Do not include any extra text, descriptions, or explanations.
-    `;
+      - The time should be a **number only** (do not include "minutes" or "min").  
+      - Always provide a cuisine type. If unknown, infer the most relevant cuisine based on ingredients.  
+      - Do not include any extra text, descriptions, or explanations.
+  `;
 
     let generatedResponse = await this.generateTextResponse(prompt);
     return generatedResponse;

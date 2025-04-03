@@ -21,6 +21,7 @@ export const suggestFoodItems = async (req: Request, res: Response) => {
     const formattedResponse: {
       [key: string]: {
         estimateTime: string;
+        cuisine: string;
         imageUrl: string;
       };
     } = {};
@@ -31,20 +32,17 @@ export const suggestFoodItems = async (req: Request, res: Response) => {
 
     const recipePromises = recipeLines.map(async (line) => {
       const parts = line.split(" - ");
-      if (parts.length === 2) {
+      if (parts.length === 3) {
         const recipeName = parts[0].trim();
-        const estimateTime = `${parts[1].trim()} min`;
+        const cuisine = parts[1].trim();
+        const estimateTime = parts[2].trim() || "";
 
         try {
-        const imageUrl = await GeminiAI.generateRecipeImage(recipeName);
-
-        console.log(imageUrl,"imgUrl")
-
-
-          return { recipeName, estimateTime, imageUrl };
+          const imageUrl = await GeminiAI.generateRecipeImage(recipeName);
+          return { recipeName, estimateTime, cuisine, imageUrl };
         } catch (error) {
           console.error(`Failed to get image for ${recipeName}:`, error);
-          return { recipeName, estimateTime, imageUrl: "" };
+          return { recipeName, estimateTime, cuisine, imageUrl: "" };
         }
       }
       return null;
@@ -56,8 +54,8 @@ export const suggestFoodItems = async (req: Request, res: Response) => {
       if (result) {
         formattedResponse[result.recipeName] = {
           estimateTime: result.estimateTime,
+          cuisine: result.cuisine,
           imageUrl: result.imageUrl,
-
         };
       }
     });
