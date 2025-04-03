@@ -40,7 +40,7 @@ export class GeminiAI {
 
   public static async generateImageResponse(
     prompt: string
-  ): Promise<{ base64Image?: string; text?: string }> {
+  ): Promise<{ imgUrl?: string; text?: string }> {
     if (!this.instance) {
       throw new Error(
         "GeminiAI not initialized. Call GeminiAI.init(API_KEY) first."
@@ -87,7 +87,7 @@ export class GeminiAI {
   public static async generateRecipeList(params: {
     ingredients: string;
     cuisine?: string;
-    utilities?: string;
+    appliances?: string;
     preferences?: string;
   }) {
     let prompt = `
@@ -95,7 +95,7 @@ export class GeminiAI {
     Use the following details:  
     - Ingredients: ${params?.ingredients}  
     - Cuisine Type (optional): ${params?.cuisine}  
-    - Available Utilities (optional): ${params?.utilities}  
+    - Available Utilities (optional): ${params?.appliances}  
     - Dietary Preferences (optional): ${params?.preferences}  
     
     Return the result as a plain list in the format:  
@@ -117,7 +117,7 @@ export class GeminiAI {
     `;
 
     let generatedResponse = await this.generateImageResponse(contents);
-    return generatedResponse;
+    return generatedResponse?.imgUrl as string;
   }
 
   public static async generateDishDescription(recipeName: string) {
@@ -131,8 +131,9 @@ export class GeminiAI {
   }
 
   public static async generateShortDescription(recipeName: string) {
-    let prompt = `Generate a short (max 5 words), vivid, and appetizing description for "${recipeName}". 
-    Focus on its key ingredients, texture, and flavor to make it sound delicious and visually appealing.`;
+    let prompt = `Generate a vivid and appetizing description for "${recipeName}". 
+      Ensure it explicitly mentions "Chicken Tikka Masala" and includes details about its creamy tomato sauce, 
+      tender grilled chicken, and Indian spices. Avoid vague terms that could misrepresent the dish.`;  
 
     let generatedResponse = await this.generateTextResponse(prompt);
     return generatedResponse;
@@ -172,6 +173,5 @@ export class GeminiAI {
     return generatedResponse; 
 
   }
-
 
 }

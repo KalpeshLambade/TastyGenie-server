@@ -16,7 +16,7 @@ export class ExpressLoader {
     this.app.use(express.json());
     this.app.use(cors());
 
-    this.app.use('/v1',router);
+    this.app.use('/api',router);
 
 
 
