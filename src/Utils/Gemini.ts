@@ -108,7 +108,6 @@ export class GeminiAI {
   }
 
   public static async generateRecipeImage(recipeName: string) {
-  
     const dishDescription = await this.generateDishDescription(recipeName);
 
     const contents = `Generate photorealistic image of a dish based on the following description: "${dishDescription}". 
@@ -131,11 +130,48 @@ export class GeminiAI {
     return generatedResponse;
   }
 
-  public static async generateShortDescription(recipeName: string){
+  public static async generateShortDescription(recipeName: string) {
     let prompt = `Generate a short (max 5 words), vivid, and appetizing description for "${recipeName}". 
     Focus on its key ingredients, texture, and flavor to make it sound delicious and visually appealing.`;
-    
+
     let generatedResponse = await this.generateTextResponse(prompt);
     return generatedResponse;
   }
+
+  public static async generateRecipeDetails(params: {
+    ingredients: string;
+    name:string;
+    cuisine?: string;
+    utilities?: string;
+    preferences?: string;
+  }) {
+    let recipePrompt = `Generate a professional, well-structured, and detailed recipe for the dish: **"${params?.name}"**, using the following details:  
+      - **Main Ingredients:** "${params?.ingredients}"  
+      - **Cuisine Type:** "${params?.cuisine || "Any"}"  
+      - **Available Kitchen Utilities:** "${params?.utilities || "Standard kitchen tools"}"  
+      - **Dietary Preferences:** "${params?.preferences || "None"}"  
+
+      ### **Recipe Format:**  
+      1️⃣ **Recipe Title:** Use the provided dish name: "${params?.name}"  
+      2️⃣ **Introduction (1-2 lines):** Describe the dish’s key flavors and appeal  
+      3️⃣ **Ingredients List:**  
+        - Categorized (e.g., Marinade, Base, Spices)  
+        - Accurate measurements for each ingredient  
+      4️⃣ **Step-by-Step Instructions:**  
+        - Clearly numbered, easy to follow  
+        - Adapted to available kitchen utilities  
+      5️⃣ **Pro Tips & Variations:**  
+        - Cooking tips, substitutions, and customization options  
+      6️⃣ **Serving Suggestions:**  
+        - Best sides, pairings, and presentation ideas  
+
+      Ensure the recipe is **engaging, practical, and well-formatted** for easy reading.  
+    `;
+
+    let generatedResponse = await this.generateTextResponse(recipePrompt);
+    return generatedResponse; 
+
+  }
+
+
 }

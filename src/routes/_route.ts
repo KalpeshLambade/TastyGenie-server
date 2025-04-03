@@ -12,7 +12,15 @@ router.get('/ping', (req:Request, res:Response)=>{
 router.post('/test', async(req:Request, res:Response)=>{
     let prompt = req?.body?.name;
     // let aiResponse = await GeminiAI.generateRecipeImage(prompt);
-    let aiResponse = await Pixel.getRecipePhoto(prompt);
+    // let aiResponse = await Pixel.getRecipePhoto(prompt);
+    let aiResponse = await GeminiAI.generateRecipeDetails({
+        name: "Chicken Biryani",
+        ingredients: "chicken, yogurt, spices, rice",
+        cuisine: "Indian",
+        utilities: "stove, pressure cooker",
+        preferences: "spicy, gluten-free"
+      });
+      
 
     res?.send({...StatusSuccess,aiResponse})
 })
