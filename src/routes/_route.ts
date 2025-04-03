@@ -9,8 +9,8 @@ router.get('/ping', (req:Request, res:Response)=>{
 })
 
 router.post('/test', async(req:Request, res:Response)=>{
-    let prompt = req?.body?.prompt;
-    let aiResponse = await GeminiAI.generateRecipeList (prompt);
+    let prompt = req?.body?.name;
+    let aiResponse = await GeminiAI.generateRecipeImage(prompt);
 
     res?.send({...StatusSuccess,aiResponse})
 })

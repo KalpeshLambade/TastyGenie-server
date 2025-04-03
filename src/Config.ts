@@ -10,6 +10,8 @@ export interface FullConfig{
     env: Env;
     domain: string;
     geminiApiKey:string;
+    pixelApiKey:string;
+    imgbb:string
 }
 
 export class Config{
