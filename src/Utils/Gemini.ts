@@ -154,41 +154,45 @@ export class GeminiAI {
     - Cuisine Type: "${params?.cuisine || "Any"}"  
     - Available Kitchen Utilities: "${params?.appliances || "Standard kitchen tools"}"  
     - Dietary Preferences: "${params?.preferences || "None"}"  
-
+    
+    ### Language Consideration:  
+    If any ingredient is mentioned using a regional term (e.g., "aalu" for potato, "mirchi" for chili), retain that term consistently throughout the recipe instead of translating it to English.  
+    
     ### Recipe Format:  
     Recipe Title: "${params?.recipeName}"  
-
+    
     Introduction:  
     - A short, engaging description highlighting key flavors and appeal.  
-
+    
     Preparation Time:  
     - Total: (e.g., "20 minutes")  
     - Preparation: (e.g., "5 minutes")  
     - Cooking: (e.g., "15 minutes")  
-
+    
     Ingredients:  
-    List each ingredient separately in bullet format (e.g., "- 2 cups milk"). Group similar ingredients under sections like "Base," "Spices," etc.  
-
+    List each ingredient separately in bullet format (e.g., "- 2 cups milk"). Group similar ingredients under sections like "Base," "Spices," etc. **Ensure regional terms are retained if provided**.  
+    
     Instructions:  
-    Numbered step-by-step format. Each step should be concise and actionable.  
-
+    Numbered step-by-step format. Each step should be concise and actionable. **Use the same regional terms for ingredients instead of English translations**.  
+    
     Pro Tips & Variations:  
     - List at least 2 tips or variations. For example:  
       - "Add a pinch of red pepper flakes for extra spice."  
       - "Substitute cheddar with mozzarella for a different flavor."  
-
+    
     Serving Suggestions:  
     - List at least 2 recommendations. For example:  
       - "Pair with a fresh green salad."  
       - "Garnish with chopped parsley for extra flavor."  
-
+    
     Nutrition Facts (per serving):  
     - Calories: (e.g., "450 kcal")  
     - Carbohydrates: (e.g., "45g")  
     - Protein: (e.g., "20g")  
     - Fat: (e.g., "25g")  
-
+    
     Ensure the recipe is **formatted clearly, concise, and structured for easy parsing**. Output should be in plain text without extra formatting symbols.`;
+    
 
     let generatedResponse = await this.generateTextResponse(recipePrompt);
     return generatedResponse; 
