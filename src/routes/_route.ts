@@ -1,6 +1,7 @@
 import { Router,Response,Request } from "express";
 import { StatusSuccess } from "../Utils/Status";
 import { GeminiAI } from "../Utils/Gemini";
+import { Pixel } from "../Utils/Pixel";
 
 const router = Router();
 
@@ -10,7 +11,8 @@ router.get('/ping', (req:Request, res:Response)=>{
 
 router.post('/test', async(req:Request, res:Response)=>{
     let prompt = req?.body?.name;
-    let aiResponse = await GeminiAI.generateRecipeImage(prompt);
+    // let aiResponse = await GeminiAI.generateRecipeImage(prompt);
+    let aiResponse = await Pixel.getRecipePhoto(prompt);
 
     res?.send({...StatusSuccess,aiResponse})
 })

@@ -121,12 +121,20 @@ export class GeminiAI {
     return generatedResponse;
   }
 
-  private static async generateDishDescription(recipeName: string) {
+  public static async generateDishDescription(recipeName: string) {
     let prompt = `Generate a detailed, photorealistic description of the dish "${recipeName}" for image generation. 
     Describe its appearance, texture, colors, and presentation, including key ingredients, garnishes, and side dishes. 
     Ensure the description makes the dish look authentic, fresh, and appetizing, resembling a real-life photograph rather than an artistic 
     or illustrated style.
   `;
+    let generatedResponse = await this.generateTextResponse(prompt);
+    return generatedResponse;
+  }
+
+  public static async generateShortDescription(recipeName: string){
+    let prompt = `Generate a short (max 5 words), vivid, and appetizing description for "${recipeName}". 
+    Focus on its key ingredients, texture, and flavor to make it sound delicious and visually appealing.`;
+    
     let generatedResponse = await this.generateTextResponse(prompt);
     return generatedResponse;
   }

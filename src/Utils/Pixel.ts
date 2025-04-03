@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Config } from "../Config";
+import { GeminiAI } from "./Gemini";
 
 export class Pixel {
   public static async getPhotos(text: string) {
@@ -38,5 +39,11 @@ export class Pixel {
     );
 
     return photoUrls.filter((item) => item !== null);
+  }
+
+  public static async getRecipePhoto(recipeName:string){
+    let description = await GeminiAI.generateShortDescription(recipeName);
+    let response = await this.getPhotos(description);
+    return response[0]?.src?.large
   }
 }
