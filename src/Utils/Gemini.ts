@@ -144,33 +144,51 @@ export class GeminiAI {
 
   public static async generateRecipeDetails(params: {
     ingredients: string;
-    name:string;
+    recipeName:string
     cuisine?: string;
-    utilities?: string;
+    appliances?: string;
     preferences?: string;
   }) {
-    let recipePrompt = `Generate a professional, well-structured, and detailed recipe for the dish: **"${params?.name}"**, using the following details:  
-      - **Main Ingredients:** "${params?.ingredients}"  
-      - **Cuisine Type:** "${params?.cuisine || "Any"}"  
-      - **Available Kitchen Utilities:** "${params?.utilities || "Standard kitchen tools"}"  
-      - **Dietary Preferences:** "${params?.preferences || "None"}"  
+    let recipePrompt = `Generate a professional, well-structured, and detailed recipe for the dish: "${params?.recipeName}", using the following details:  
+    - Main Ingredients: "${params?.ingredients}"  
+    - Cuisine Type: "${params?.cuisine || "Any"}"  
+    - Available Kitchen Utilities: "${params?.appliances || "Standard kitchen tools"}"  
+    - Dietary Preferences: "${params?.preferences || "None"}"  
 
-      ### **Recipe Format:**  
-      1️⃣ **Recipe Title:** Use the provided dish name: "${params?.name}"  
-      2️⃣ **Introduction (1-2 lines):** Describe the dish’s key flavors and appeal  
-      3️⃣ **Ingredients List:**  
-        - Categorized (e.g., Marinade, Base, Spices)  
-        - Accurate measurements for each ingredient  
-      4️⃣ **Step-by-Step Instructions:**  
-        - Clearly numbered, easy to follow  
-        - Adapted to available kitchen utilities  
-      5️⃣ **Pro Tips & Variations:**  
-        - Cooking tips, substitutions, and customization options  
-      6️⃣ **Serving Suggestions:**  
-        - Best sides, pairings, and presentation ideas  
+    ### Recipe Format:  
+    Recipe Title: "${params?.recipeName}"  
 
-      Ensure the recipe is **engaging, practical, and well-formatted** for easy reading.  
-    `;
+    Introduction:  
+    - A short, engaging description highlighting key flavors and appeal.  
+
+    Preparation Time:  
+    - Total: (e.g., "20 minutes")  
+    - Preparation: (e.g., "5 minutes")  
+    - Cooking: (e.g., "15 minutes")  
+
+    Ingredients:  
+    List each ingredient separately in bullet format (e.g., "- 2 cups milk"). Group similar ingredients under sections like "Base," "Spices," etc.  
+
+    Instructions:  
+    Numbered step-by-step format. Each step should be concise and actionable.  
+
+    Pro Tips & Variations:  
+    - List at least 2 tips or variations. For example:  
+      - "Add a pinch of red pepper flakes for extra spice."  
+      - "Substitute cheddar with mozzarella for a different flavor."  
+
+    Serving Suggestions:  
+    - List at least 2 recommendations. For example:  
+      - "Pair with a fresh green salad."  
+      - "Garnish with chopped parsley for extra flavor."  
+
+    Nutrition Facts (per serving):  
+    - Calories: (e.g., "450 kcal")  
+    - Carbohydrates: (e.g., "45g")  
+    - Protein: (e.g., "20g")  
+    - Fat: (e.g., "25g")  
+
+    Ensure the recipe is **formatted clearly, concise, and structured for easy parsing**. Output should be in plain text without extra formatting symbols.`;
 
     let generatedResponse = await this.generateTextResponse(recipePrompt);
     return generatedResponse; 

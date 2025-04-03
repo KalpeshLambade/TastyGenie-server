@@ -68,3 +68,61 @@ export const suggestFoodItems = async (req: Request, res: Response) => {
       .send({ ...StatusFailed, message: "Internal Server Error" });
   }
 };
+
+export const getRecipeDetails = async(req:Request, res:Response)=>{
+  const { ingredients, appliances, preferences, cuisine, imgUrl, recipeName } = req?.body;
+
+  if(!ingredients || !imgUrl || !recipeName){
+    res?.send(StatusFailed);
+    return;
+  }
+
+  try {
+    let recipeDetail = await GeminiAI.generateRecipeDetails({
+      ingredients,
+      appliances,
+      preferences,
+      cuisine,
+      recipeName
+    });
+
+    if(recipeDetail?.length){
+      let recipeObj = parseRecipe(recipeDetail,imgUrl);
+      res?.send({...StatusSuccess,recipeObj});
+      return;
+    }
+
+    res?.send({...StatusFailed, message: "Something Went Wrong"});
+    return;
+  } catch (error) {
+    res
+      ?.status(500)
+      .send({ ...StatusFailed, message: "Internal Server Error" });
+  }
+}
+
+const parseRecipe = (recipeString: string,imgUrl:string) => {
+  const recipeObj = {
+    recipeName: recipeString.match(/## (.*)\n/)?.[1] || "",
+    introduction: recipeString.match(/Introduction:\s*(.*)/)?.[1] || "",
+    preparationTime: {
+      total: recipeString.match(/Total:\s*(.*)/)?.[1] || "",
+      preparation: recipeString.match(/Preparation:\s*(.*)/)?.[1] || "",
+      cooking: recipeString.match(/Cooking:\s*(.*)/)?.[1] || ""
+    },
+    ingredients: [...recipeString.matchAll(/- (.*?)\n/g)].map(match => match[1]).slice(2, -1), 
+    instructions: [...recipeString.matchAll(/\d+\.\s(.*?)\n/g)].map(match => match[1]), 
+    proTips: [...recipeString.matchAll(/Pro Tips & Variations:\n\n- (.*?)\n/g)].map(match => match[1]),
+    servingSuggestions: [...recipeString.matchAll(/Serving Suggestions:\n\n- (.*?)\n/g)].map(match => match[1]),
+    nutritionFacts: {
+      calories: recipeString.match(/Calories:\s*(.*?)\n/)?.[1] || "",
+      carbohydrates: recipeString.match(/Carbohydrates:\s*(.*?)\n/)?.[1] || "",
+      protein: recipeString.match(/Protein:\s*(.*?)\n/)?.[1] || "",
+      fat: recipeString.match(/Fat:\s*(.*?)\n/)?.[1] || ""
+    },
+    imgUrl
+  };
+
+  return recipeObj;
+};
+
