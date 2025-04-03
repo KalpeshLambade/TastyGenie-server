@@ -87,7 +87,7 @@ export const getRecipeDetails = async(req:Request, res:Response)=>{
     });
 
     if(recipeDetail?.length){
-      let recipeObj = parseRecipe(recipeDetail,imgUrl);
+      let recipeObj = parseRecipe(recipeDetail,imgUrl,recipeName);
       res?.send({...StatusSuccess,recipeObj});
       return;
     }
@@ -101,9 +101,9 @@ export const getRecipeDetails = async(req:Request, res:Response)=>{
   }
 }
 
-const parseRecipe = (recipeString: string,imgUrl:string) => {
+const parseRecipe = (recipeString: string,imgUrl:string,recipeName:string) => {
   const recipeObj = {
-    recipeName: recipeString.match(/## (.*)\n/)?.[1] || "",
+    recipeName: recipeString.match(/## (.*)\n/)?.[1] || recipeName,
     introduction: recipeString.match(/Introduction:\s*(.*)/)?.[1] || "",
     preparationTime: {
       total: recipeString.match(/Total:\s*(.*)/)?.[1] || "",
