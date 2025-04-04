@@ -31,6 +31,7 @@
   "dependencies": {
     "@google/genai": "^0.7.0",
     "axios": "^1.8.4",
+    "cloudinary": "^2.6.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "i": "^0.3.7",

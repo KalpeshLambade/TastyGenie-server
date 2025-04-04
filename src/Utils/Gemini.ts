@@ -2,6 +2,7 @@ import { GoogleGenAI } from "@google/genai";
 import { Config } from "../Config";
 import fs from "fs";
 import { Imgbb } from "./Imgbb";
+import { Cloudinary } from "./Cloudinary";
 
 export class GeminiAI {
   private static instance: GoogleGenAI;
@@ -39,7 +40,8 @@ export class GeminiAI {
   }
 
   public static async generateImageResponse(
-    prompt: string
+    prompt: string,
+    recipeName:string
   ): Promise<{ imgUrl?: string; text?: string }> {
     if (!this.instance) {
       throw new Error(
@@ -73,9 +75,9 @@ export class GeminiAI {
         if (part.text) {
           result.text = part.text;
         } else if (part.inlineData?.data) {
-          const byteArray = Uint8Array.from(atob(part.inlineData.data), c => c.charCodeAt(0));
-          const blob = new Blob([byteArray], { type: 'image/png' });
-          result.imgUrl = await Imgbb.uploadImage(blob);
+          
+          result.imgUrl = await Cloudinary.uploadImage(part.inlineData?.data,recipeName);
+          
         }
       }
 
@@ -121,7 +123,7 @@ export class GeminiAI {
       Avoid artistic or illustrated styles.
     `;
 
-    let generatedResponse = await this.generateImageResponse(contents);
+    let generatedResponse = await this.generateImageResponse(contents,recipeName);
     return generatedResponse?.imgUrl as string;
   }
 
