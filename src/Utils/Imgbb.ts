@@ -1,6 +1,46 @@
 import axios from "axios";
 import { Config } from "../Config";
 
+// export class Imgbb {
+//     private static readonly MAX_SIZE_MB = 32;
+//     private static readonly MAX_SIZE_BYTES = Imgbb.MAX_SIZE_MB * 1024 * 1024;
+//     private static readonly EXPIRATION_TIME = 86400;
+
+//     public static async uploadImage(image: File | Blob | string, name?: string) {
+//         try {
+//             const formData = new FormData();
+//             formData.append('key', Config.configKeys.imgbb);
+//             formData.append('expiration', Imgbb.EXPIRATION_TIME.toString());
+
+//             if (typeof image === 'string') {
+//                 formData.append('image', image);
+//             } else {
+//                 if (image.size > Imgbb.MAX_SIZE_BYTES) {
+//                     throw new Error(`Image size exceeds ${Imgbb.MAX_SIZE_MB} MB limit.`);
+//                 }
+
+//                 formData.append('image', image, name || 'image.jpg');
+//             }
+
+//             const response = await axios.post('https://api.imgbb.com/1/upload', formData, {
+//                 headers: {
+//                     'Content-Type': 'multipart/form-data',
+//                 },
+//             });
+
+//             if (response.data?.error) {
+//                 console.error("Image upload error:", response.data.error);
+//                 return null; 
+//             }
+
+//             return response.data?.data?.display_url || null;
+//         } catch (error) {
+//             console.error("Image upload failed:", error);
+//             return null;
+//         }
+//     }
+// }
+
 export class Imgbb {
     private static readonly MAX_SIZE_MB = 32;
     private static readonly MAX_SIZE_BYTES = Imgbb.MAX_SIZE_MB * 1024 * 1024;
@@ -19,7 +59,14 @@ export class Imgbb {
                     throw new Error(`Image size exceeds ${Imgbb.MAX_SIZE_MB} MB limit.`);
                 }
 
-                formData.append('image', image, name || 'image.jpg');
+                // Fix: Convert Blob to File before uploading
+                const file = new File([image], name || 'image.jpg', { type: 'image/png' });
+                formData.append('image', file);
+            }
+
+            // Debugging: Log FormData contents
+            for (const pair of formData.entries()) {
+                console.log(pair[0], pair[1]);
             }
 
             const response = await axios.post('https://api.imgbb.com/1/upload', formData, {
@@ -29,14 +76,19 @@ export class Imgbb {
             });
 
             if (response.data?.error) {
-                console.error("Image upload error:", response.data.error);
-                return null; 
+                console.error("IMGBB API Error:", response.data.error);
+                return null;
             }
 
             return response.data?.data?.display_url || null;
-        } catch (error) {
-            console.error("Image upload failed:", error);
+        } catch (error:any) {
+            if (error.response) {
+                console.error("IMGBB API Error:", error.response.data);
+            } else {
+                console.error("Image upload failed:", error);
+            }
             return null;
         }
     }
 }
+
