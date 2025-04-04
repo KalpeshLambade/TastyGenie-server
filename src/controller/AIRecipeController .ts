@@ -39,6 +39,7 @@ export const suggestFoodItems = async (req: Request, res: Response) => {
 
         try {
           const imageUrl = await GeminiAI.generateRecipeImage(recipeName);
+          console.log("imageUrl", imageUrl)
           return { recipeName, estimateTime, cuisine, imageUrl };
         } catch (error) {
           console.error(`Failed to get image for ${recipeName}:`, error);
