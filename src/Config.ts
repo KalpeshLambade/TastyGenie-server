@@ -10,8 +10,6 @@ export interface FullConfig {
   env: Env;
   domain: string;
   geminiApiKey: string;
-  pixelApiKey: string;
-  imgbb: string;
   cloudinary: {
     cloud_name: string;
     api_key: string;

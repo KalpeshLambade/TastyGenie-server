@@ -1,7 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
 import { Config } from "../Config";
-import fs from "fs";
-import { Imgbb } from "./Imgbb";
 import { Cloudinary } from "./Cloudinary";
 
 export class GeminiAI {
