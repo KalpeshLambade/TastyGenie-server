@@ -73,7 +73,9 @@ export class GeminiAI {
         if (part.text) {
           result.text = part.text;
         } else if (part.inlineData?.data) {
-          result.imgUrl = await Imgbb.uploadImage(part.inlineData?.data);
+          const byteArray = Uint8Array.from(atob(part.inlineData.data), c => c.charCodeAt(0));
+          const blob = new Blob([byteArray], { type: 'image/png' });
+          result.imgUrl = await Imgbb.uploadImage(blob);
         }
       }
 
