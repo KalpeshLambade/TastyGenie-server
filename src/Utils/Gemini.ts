@@ -135,15 +135,6 @@ export class GeminiAI {
     return generatedResponse;
   }
 
-  public static async generateShortDescription(recipeName: string) {
-    let prompt = `Generate a vivid and appetizing description for "${recipeName}". 
-      Ensure it explicitly mentions "Chicken Tikka Masala" and includes details about its creamy tomato sauce, 
-      tender grilled chicken, and Indian spices. Avoid vague terms that could misrepresent the dish.`;  
-
-    let generatedResponse = await this.generateTextResponse(prompt);
-    return generatedResponse;
-  }
-
   public static async generateRecipeDetails(params: {
     ingredients: string;
     recipeName:string
@@ -200,5 +191,23 @@ export class GeminiAI {
     return generatedResponse; 
 
   }
+
+  public static async generateImageSearchDescription(recipeName: string,cuisine: string) {
+    let prompt = `You are a food photo prompt generator for an image search engine.
+      Given a dish name "${recipeName}" and cuisine "${cuisine}", return only one **concise, high-quality photo search query** optimized for getting an accurate result.
+      Include:
+      - Dish name
+      - Cuisine
+      - Description of dish type (e.g., curry, rice, dessert)
+      - Presentation style (e.g., close-up, top view, bowl/plate)
+      - Lighting (e.g., natural, bright)
+      - Optional: garnish or side
+      Do not include extra words, options, or paragraphs. Only output the search query as a single line.
+    `.trim();
+
+    let generatedResponse = await this.generateTextResponse(prompt);
+    return generatedResponse;
+  }
+
 
 }

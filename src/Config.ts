@@ -15,6 +15,7 @@ export interface FullConfig {
     api_key: string;
     api_secret: string;
   };
+  pixelApiKey:string
 }
 
 export class Config {

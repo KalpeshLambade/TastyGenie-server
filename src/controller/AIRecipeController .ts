@@ -1,6 +1,7 @@
 import { Response, Request } from "express";
 import { StatusFailed, StatusSuccess } from "../Utils/Status";
 import { GeminiAI } from "../Utils/Gemini";
+import { Pixel } from "../Utils/Pixel";
 
 export const suggestFoodItems = async (req: Request, res: Response) => {
   const { ingredients, appliances, preferences, cuisine } = req?.body;
@@ -38,7 +39,11 @@ export const suggestFoodItems = async (req: Request, res: Response) => {
         const estimateTime = parts[2].trim() || "";
 
         try {
-          const imageUrl = await GeminiAI.generateRecipeImage(recipeName);
+          let imageUrl = await GeminiAI.generateRecipeImage(recipeName);
+          if(!imageUrl){
+            imageUrl = await Pixel.getPhotoFromRecipeName(recipeName,cuisine);
+          }
+
           return { recipeName, estimateTime, cuisine, imageUrl };
         } catch (error) {
           console.error(`Failed to get image for ${recipeName}:`, error);
